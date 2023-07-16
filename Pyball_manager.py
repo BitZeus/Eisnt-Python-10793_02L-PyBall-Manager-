@@ -9,38 +9,52 @@ import tkinter as tk
 import random
 
 class SimuladorFutebol(tk.Tk):
-
-    def __init__(self):
+    def __init__(self, nome_minha_equipa, treinador):
         super().__init__()
-        self.title("Simulador de Equipa")
-        self.equipa = {"nome": "Minha Equipa", "jogadores": [], "saldo": 1000}
-        tk.Label(self, text=self.equipa["nome"]).pack()
-        tk.Label(self, text=f"Saldo: {self.equipa['saldo']}").pack()
-        tk.Button(self, text="Simular Jogo", command=self.simular_jogo).pack()
-    def simular_jogo(self):
-        resultado = random.choice(['Vitória', 'Derrota', 'Empate'])
-        tk.Label(self, text=f"Resultado do jogo: {resultado}").pack()
-    def criar_equipe():
-        nome_equipe = entry_nome.get()
-    # Salvar o nome da equipe no banco de dados ou em uma variável global para uso posterior
-        print("Equipe criada: ", nome_equipe)
-    # Criar a janela principal
-    window = tk.Tk()
+        self.title("Pyball Football Manager")
+        self.geometry("500x300")
 
-# Criar um rótulo e um campo de entrada para o nome da equipe
-    label_nome = tk.Label(window, text="Nome da Equipe:")
-    label_nome.pack()
+        self.lista_nomes_equipas = ["Diamante", "Esmeralda", "Rubi", "Safira", "Água-marinha", "Topázio", "Opala", "Ametista", "Turmalina", "Jade"]
+        self.dic_equipas_jogadores = {}
+        self.dic_jogadores={}
+        self.historico={}
+        self.jogo=0
 
-    entry_nome = tk.Entry(window)
-    entry_nome.pack()
+        # Exemplo de uso
+        self.lista_jogadores = self.gerar_lista_jogadores()
+        self.lista_dic_jogadores = self.criar_lista_jogadores(self.lista_jogadores)
 
-# Criar um botão para criar a equipe
-    btn_criar_equipe = tk.Button(window, text="Criar Equipe", command=criar_equipe)
-    btn_criar_equipe.pack()
+        for i in range(10):
+            if i == 9:
+                jogadores = self.lista_jogadores[i*25: (i+1)*25]
+                self.dic_equipas_jogadores[nome_minha_equipa] = jogadores
+            else:
+                nome_equipa = self.lista_nomes_equipas[i]
+                jogadores = self.lista_jogadores[i*25: (i+1)*25]
+                self.dic_equipas_jogadores[nome_equipa] = jogadores
 
-# Iniciar o loop principal da janela
-    window.mainloop()
+        self.minha_equipa = Equipa(nome_minha_equipa, self.dic_equipas_jogadores[nome_minha_equipa], 1000, treinador)
 
+        self.label_nome_equipa = tk.Label(self, text=self.minha_equipa.nome)
+        self.label_nome_equipa.place(x=20, y=20)
+
+        self.label_saldo = tk.Label(self, text=f"Saldo: {self.minha_equipa.saldo}")
+        self.label_saldo.place(x=20, y=40)
+
+        self.label_treinador = tk.Label(self, text=f"Treinador: {self.minha_equipa.treinador}")
+        self.label_treinador.place(x=20, y=60)
+
+        self.botao_ver_minha_equipa = tk.Button(self, text="Ver Minha Equipa", command=self.ver_jogadores_minha_equipa)
+        self.botao_ver_minha_equipa.place(x=20, y=100)
+
+        self.label_proximo_jogo = tk.Label(self, text="")
+        self.label_proximo_jogo.place(x=180, y=200)
+
+        self.label_resultado = tk.Label(self, text="")
+        self.label_resultado.place(x=180, y=220)
+
+        self.botao_simular = tk.Button(self, text="Próximo Jogo", command=self.proximo_jogo)
+        self.botao_simular.place(x=220, y=250)
 
 if __name__ == '__main__':
     window = tk.Tk()
