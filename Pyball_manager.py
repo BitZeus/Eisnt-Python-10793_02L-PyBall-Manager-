@@ -151,6 +151,51 @@ class SimuladorFutebol(tk.Tk):
 
         return lista_jogadores
 
+    def simular_jogo(self):
+
+        print(self.lista_nomes_equipas, "wwwss")
+        self.jogo+=1
+        if self.jogo<10:
+                #self.nome_equipa_adversaria = random.choice(self.lista_nomes_equipas[:9])
+            equipa_adversaria = Equipa(self.nome_equipa_adversaria, self.dic_equipas_jogadores[self.nome_equipa_adversaria], 1000, "Treinador Adversário")
+            confronto=f"{self.minha_equipa.nome} vs {self.nome_equipa_adversaria}"
+            
+            if confronto not in self.historico.keys():
+                 
+
+            # Simulação do jogo (implemente a lógica do jogo de acordo com suas regras)
+                resultado = random.choice(['Vitória', 'Derrota', 'Empate'])
+                if resultado == 'Vitória':
+                    self.minha_equipa.pontos += 3
+                elif resultado == 'Empate':
+                    self.minha_equipa.pontos += 1
+                    equipa_adversaria.pontos += 1
+                else:
+                    equipa_adversaria.pontos += 3
+
+                self.historico[confronto]= resultado
+            
+
+
+
+                self.label_resultado.configure(text=f"Resultado do jogo: {resultado}")
+
+            self.botao_simular.configure(text="Próximo Jogo", command=self.proximo_jogo)
+            print(self.historico)
+            print(self.minha_equipa.pontos, "pontos")
+
+        else:
+            print("acabou o torneio!! total pontos: ", self.minha_equipa.pontos )
+
+    def proximo_jogo(self):
+        self.nome_equipa_adversaria = random.choice(self.lista_nomes_equipas[:9])
+        #nome_equipa_adversaria = random.choice(list(self.dic_equipas_jogadores.keys()))
+        self.equipa_adversaria = Equipa(self.nome_equipa_adversaria, self.dic_equipas_jogadores[self.nome_equipa_adversaria], 1000, "Treinador Adversário")
+
+        self.label_resultado.configure(text="")
+        self.label_proximo_jogo.configure(text=f"Próximo jogo: {self.minha_equipa.nome} vs {self.nome_equipa_adversaria}")
+        self.ver_equipa_adversaria = tk.Button(self, text="Ver Equipa Adversaria", command=self.ver_jogadores_equipa_adversaria).place(x=20, y=200)
+        self.botao_simular.configure(text="Simular Jogo", command=self.simular_jogo)
 
 if __name__ == '__main__':
     window = tk.Tk()
