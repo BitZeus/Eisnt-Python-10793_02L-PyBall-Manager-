@@ -151,6 +151,18 @@ class SimuladorFutebol(tk.Tk):
 
         return lista_jogadores
 
+    def criar_lista_jogadores(self, nomes_jogadores):
+            lista_jogadores = []
+            for nome in nomes_jogadores:
+                jogador = {
+                    "nome": nome,
+                    "idade": random.randint(18, 40),
+                    "posicao": random.choice(["Atacante", "Meio-campista", "Defensor", "Guarda-Redes"]),
+                    "valor": random.randint(50, 500),
+                    "Golos": 0
+                }
+                lista_jogadores.append(jogador)
+            return lista_jogadores
 
 if __name__ == '__main__':
     window = tk.Tk()
