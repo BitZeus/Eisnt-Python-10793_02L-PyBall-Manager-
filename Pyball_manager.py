@@ -150,6 +150,21 @@ class SimuladorFutebol(tk.Tk):
 
         return lista_jogadores
 
+    
+
+    def criar_lista_jogadores(self, nomes_jogadores):
+            lista_jogadores = []
+            for nome in nomes_jogadores:
+                jogador = {
+                    "nome": nome,
+                    "idade": random.randint(18, 40),
+                    "posicao": random.choice(["Atacante", "Meio-campista", "Defensor", "Guarda-Redes"]),
+                    "valor": random.randint(50, 500),
+                    "Golos": 0
+                }
+                lista_jogadores.append(jogador)
+            return lista_jogadores
+        
     def simular_jogo(self):
 
         print(self.lista_nomes_equipas, "wwwss")
@@ -173,8 +188,6 @@ class SimuladorFutebol(tk.Tk):
                     equipa_adversaria.pontos += 3
 
                 self.historico[confronto]= resultado
-            
-
 
 
                 self.label_resultado.configure(text=f"Resultado do jogo: {resultado}")
@@ -195,19 +208,32 @@ class SimuladorFutebol(tk.Tk):
         self.label_proximo_jogo.configure(text=f"Próximo jogo: {self.minha_equipa.nome} vs {self.nome_equipa_adversaria}")
         self.ver_equipa_adversaria = tk.Button(self, text="Ver Equipa Adversaria", command=self.ver_jogadores_equipa_adversaria).place(x=20, y=200)
         self.botao_simular.configure(text="Simular Jogo", command=self.simular_jogo)
+        
+    def ver_jogadores_minha_equipa(self):
+        jogadores_minha_equipa = self.minha_equipa.jogadores
+        jogadores_texto = "\n".join(jogadores_minha_equipa)
+        messagebox.showinfo("Jogadores da Minha Equipa", jogadores_texto)
 
-    def criar_lista_jogadores(self, nomes_jogadores):
-            lista_jogadores = []
-            for nome in nomes_jogadores:
-                jogador = {
-                    "nome": nome,
-                    "idade": random.randint(18, 40),
-                    "posicao": random.choice(["Atacante", "Meio-campista", "Defensor", "Guarda-Redes"]),
-                    "valor": random.randint(50, 500),
-                    "Golos": 0
-                }
-                lista_jogadores.append(jogador)
-            return lista_jogadores
+    def ver_jogadores_equipa_adversaria(self):
+        jogadores_equipa_adversaria = self.equipa_adversaria.jogadores
+        jogadores_texto = "\n".join(jogadores_equipa_adversaria)
+        messagebox.showinfo("Jogadores da Equipa Adversaria", jogadores_texto)
+
+class Equipa:
+    def __init__(self, nome, jogadores, saldo, treinador):
+        self.nome = nome
+        self.jogadores = jogadores
+        self.saldo = saldo
+        self.treinador = treinador
+        self.pontos = 0  # Pontuação da equipa na liga
+
+def criar_equipe():
+    nome_minha_equipa = entry_nome.get()
+    treinador = entry_nome_treinador.get()
+    window.destroy()
+
+    app = SimuladorFutebol(nome_minha_equipa, treinador)
+    app.mainloop()
 
 if __name__ == '__main__':
     window = tk.Tk()
