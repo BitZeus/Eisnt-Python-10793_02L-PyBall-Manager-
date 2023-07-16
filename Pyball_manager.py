@@ -55,6 +55,102 @@ class SimuladorFutebol(tk.Tk):
 
         self.botao_simular = tk.Button(self, text="Próximo Jogo", command=self.proximo_jogo)
         self.botao_simular.place(x=220, y=250)
+        
+        self.classificacao = {}  # Dicionário para armazenar a classificação das equipas
+
+    def gerar_lista_jogadores(self):
+        nomes_proprios = [
+            "João", "Maria", "Pedro", "Ana", "Carlos", "Mariana", "Rafael", "Julia",
+            "Gustavo", "Camila", "Luiz", "Isabella", "Fernando", "Laura", "Lucas"
+        ]
+
+        apelidos = [
+            "Silva", "Santos", "Oliveira", "Souza", "Rodrigues", "Almeida",
+            "Ferreira", "Pereira", "Costa", "Gomes", "Martins", "Ribeiro",
+            "Carvalho", "Cavalcanti", "Lima"
+        ]
+
+        celebridades = [
+    "Brad Pitt",
+    "Angelina Jolie",
+    "Leonardo DiCaprio",
+    "Jennifer Aniston",
+    "Tom Hanks",
+    "Meryl Streep",
+    "Robert Downey Jr.",
+    "Scarlett Johansson",
+    "Johnny Depp",
+    "Natalie Portman",
+    "Dwayne Johnson",
+    "Emma Stone",
+    "Ryan Reynolds",
+    "Jennifer Lawrence",
+    "Will Smith",
+    "Charlize Theron",
+    "Chris Hemsworth",
+    "Gal Gadot",
+    "Hugh Jackman",
+    "Cate Blanchett",
+    "Chris Evans",
+    "Margot Robbie",
+    "Keanu Reeves",
+    "Anne Hathaway",
+    "George Clooney",
+    "Sandra Bullock",
+    "Matt Damon",
+    "Kate Winslet",
+    "Mark Wahlberg",
+    "Julia Roberts",
+    "Chris Pratt",
+    "Halle Berry",
+    "Christian Bale",
+    "Amy Adams",
+    "Idris Elba",
+    "Saoirse Ronan",
+    "Daniel Craig",
+    "Emma Watson",
+    "Ben Affleck",
+    "Zoe Saldana",
+    "Tom Cruise",
+    "Viola Davis",
+    "Michael B. Jordan",
+    "Kristen Stewart",
+    "Samuel L. Jackson",
+    "Amanda Seyfried",
+    "Robert Pattinson",
+    "Reese Witherspoon",
+    "Joaquin Phoenix",
+    "Gwyneth Paltrow",
+    "Nicole Kidman",
+    "Lionel Messi",
+    "Cristiano Ronaldo",
+    "Neymar Jr.",
+    "Luka Modric",
+    "Virgil van Dijk",
+    "Kylian Mbappé",
+    "Mohamed Salah",
+    "Sergio Ramos",
+    "Harry Kane",
+    "Antoine Griezmann"
+]
+
+
+
+        lista_jogadores = []
+
+        for _ in range(189):
+            nome_proprio = random.choice(nomes_proprios)
+            apelido = random.choice(apelidos)
+            nome_completo = nome_proprio + " " + apelido
+            lista_jogadores.append(nome_completo)
+
+        lista_jogadores.extend(celebridades)
+        print(len(lista_jogadores), "www")
+
+        random.shuffle(lista_jogadores)
+
+        return lista_jogadores
+
 
 if __name__ == '__main__':
     window = tk.Tk()
