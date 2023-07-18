@@ -433,7 +433,7 @@ if __name__ == '__main__':
     window = tk.Tk()
     window.title("Inicialização de jogo")
     window.geometry("500x300")
-    label_titulo = tk.Label(window, text="Ben-vindo ao PyBall Football Manager", bg="orange", fg="black", font=("Arial", 10, "bold")).pack()
+    label_titulo = tk.Label(window, text="Bem-vindo ao PyBall Football Manager", bg="orange", fg="black", font=("Arial", 10, "bold")).pack()
     label_nome = tk.Label(window, text="Nome da Equipa:")
     label_nome.pack()
 
