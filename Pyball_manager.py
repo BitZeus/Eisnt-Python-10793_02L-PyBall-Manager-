@@ -9,8 +9,9 @@ import unittest
 #BitZeus
 #pfragoso77
 
-
+#Classe principal que contêm a janela principal de jogo
 class SimuladorFutebol(tk.Tk):
+    #definições de inicialização da classe- janela, variáveis, metodos e funçoes
     def __init__(self, nome_minha_equipa, treinador):
         super().__init__()
         self.title("Pyball Football Manager")
@@ -36,7 +37,7 @@ class SimuladorFutebol(tk.Tk):
         self.lista_apelidos = ["Silva", "Santos", "Fernandes", "Pereira", "Ribeiro", "Costa","Smith", "Johnson", "Brown", "Davis",
                                      "Dubois", "Lefèvre", "Martin", "García", "Rodríguez", "López" ]
                 
-        
+        #definição de lables e butoes da janela principal do jogo
 
         self.label_nome_equipa = tk.Label(self, text=f"Minha Equipa: {self.minha_equipa.nome}", bg="orange", fg="black", font=("Arial", 10, "bold"))
         self.label_nome_equipa.place(x=20, y=20)
@@ -58,21 +59,21 @@ class SimuladorFutebol(tk.Tk):
         self.botao_simular = tk.Button(self, text="Iniciar Liga", command=self.criar_liga, bg="light green", fg="black", font=("Arial", 10, "bold"))
         self.botao_simular.place(x=220, y=250)
         
-        
+        #inicialização dos metodos/funçoes para criar as listas/dicionario/plantel das equipas e jogadores
         self.jogadores = self.criar_lista_jogadores()
         self.dicionario_jogadores = self.criar_dicionario_jogadores(self.equipas, self.jogadores)
         self.plantel = self.criar_plantel_equipas(self.jogadores, self.equipas)
         
-        
+       #definição da subclasse minha_equipa 
         self.minha_equipa = Equipa(nome_minha_equipa, self.plantel[nome_minha_equipa], 1000, treinador)
         
-        
+   #funçao que junta o nome e o apelido de cada jogador a partir da lista nome e da lista apelidos     
     def gerar_jogador(self, nome, apelido):
             nome_escolhido = random.choice(nome)
             apelido_escolhido= random.choice(apelido)
             
             return f"{nome_escolhido} {apelido_escolhido}"          
-        
+   #funçao que cria uma lista global dos jogadores tendo em conta as quantidades maximas para cada posiçao     
     def criar_lista_jogadores(self):
         lista_jogadores = {}
         quantidade_jogadores = {
@@ -86,7 +87,7 @@ class SimuladorFutebol(tk.Tk):
             lista_jogadores[tipo_jogador] = [self.gerar_jogador(self.lista_nomes,self.lista_apelidos) for _ in range(quantidade)]
 
         return lista_jogadores
-
+    #funçao que cria os diversos plantéis das equipas apartir da lista global de jogadores
     def criar_plantel_equipas(self, jogadores, equipas):
         plantel = {}
         quantidade_jogadores_por_equipa = {
@@ -113,7 +114,7 @@ class SimuladorFutebol(tk.Tk):
         
         
         return plantel
-
+    #funcao que gera a formaçao da equipa:titulares, suplentes, tendo em conta a formaçao escolhida
     def criar_jogadores_titulares(self, plantel, equipa):
         jogadores_titulares_equipa = {}
         jogadores_suplentes_equipa = {}
@@ -194,7 +195,7 @@ class SimuladorFutebol(tk.Tk):
             formacao.append(jogadores_suplentes_equipa)
 
         return formacao
-
+    #funçao que cria dicionario de jogadores por equipa tendo em conta a quantidade por posiçao
     def criar_dicionario_jogadores(self, equipas, jogadores):
         dicionario_jogadores = {}
         quantidade_jogadores_por_equipa = {
@@ -221,7 +222,7 @@ class SimuladorFutebol(tk.Tk):
 
         return dicionario_jogadores
 
-
+    #funçao que cria um dicionario para cada jogador tendo em conta os diversos atributos
     def criar_jogador_dict(self, nome_completo, posicao, equipa):
         nome, apelido = nome_completo.split(" ")
         jogador_dict = {
@@ -235,7 +236,7 @@ class SimuladorFutebol(tk.Tk):
         }
         return jogador_dict
 
-
+    #funcao que exibe os jogadores da minha_equipa consoante a formaçao escolhida
     def ver_jogadores_minha_equipa(self):
         self.formacao_titulares = self.criar_jogadores_titulares(self.plantel, self.minha_equipa.nome)
 
@@ -252,7 +253,7 @@ class SimuladorFutebol(tk.Tk):
         janela.geometry("200x450")
         tk.Label(janela, text=jogadores_texto, anchor="w", justify="left").place(x=20, y=10)
         
-
+    #funcao que define a formaçao da minha_equipa
     def definir_formacao_minha_equipa(self):
         self.escolha_formacao_minha_equipa = tk.StringVar(value=self.formacao_minha_equipa)
 
@@ -272,11 +273,11 @@ class SimuladorFutebol(tk.Tk):
 
         confirmar_button = tk.Button(janela, text="Confirmar", command=self.obter_formacao_minha_equipa)
         confirmar_button.place(x=100, y=90)
-
+    #funçao que retorna/atualizada a formação da equipa
     def obter_formacao_minha_equipa(self):
         self.formacao_minha_equipa = self.escolha_formacao_minha_equipa.get()
 
-
+    #funcao que exibe os jogadores da equipa adversaria
     def ver_jogadores_equipa_adversaria(self):
         if not self.formacao_equipa_adversaria:
             self.formacao_equipa_adversaria = self.criar_jogadores_titulares(self.plantel, self.equipa_adversaria.nome)
@@ -294,7 +295,7 @@ class SimuladorFutebol(tk.Tk):
         tk.Label(janela, text=jogadores_texto, anchor="w", justify="left").pack()
 
 
-
+    #funcao que inicializa a competiçao da liga entre as 10 equipas e em 10 jogos
     def criar_liga(self):
         num_jornadas = 10
         if self.jornada == 0:
@@ -329,7 +330,7 @@ class SimuladorFutebol(tk.Tk):
         self.botao_vertabela = tk.Button(self, text="Ver Tabela", command=self.ver_tabela).place(x=350, y=250)
         
     
-
+    #funcao que simula o proximo jogo e retorna o resultado da jornada
     def simular_jogo(self):
         equipe_campea = None
         pontos_campea = -1
@@ -390,7 +391,7 @@ class SimuladorFutebol(tk.Tk):
                         self.label_resultado.configure(text=f"{meu_jogo}, jornada: {self.jornada + 1}")
                         messagebox.showinfo("Resultado meu jogo:", f"{meu_jogo}" )
             self.formacao_equipa_adversaria=""
-        
+    #funcao que exibe a tabela de classificaçao das equipas        
     def ver_tabela(self):
         tabela= tk.Tk()
         tabela.title("Tabela")  
@@ -403,12 +404,12 @@ class SimuladorFutebol(tk.Tk):
         label_nome.place(x=20, y=20)
         
         
-        
+ #classe do teste unitario de soma       
 class TestSoma(unittest.TestCase):
     def test_juntar_palavras_com_espaço(self):
         app = SimuladorFutebol("", "")
         self.assertEqual(app.gerar_jogador("a", "b"), "a b")
-
+#subclasse equipa
 class Equipa:
     def __init__(self, nome, jogadores, saldo, treinador):
         self.nome = nome
@@ -417,7 +418,7 @@ class Equipa:
         self.treinador = treinador
         self.pontos = 0 
         self.golos = 0
-
+#funcao que cria o nome da equipa na janela de inicializaçao
 def criar_equipe():
     nome_minha_equipa = entry_nome.get()
     treinador = entry_nome_treinador.get()
@@ -428,12 +429,12 @@ def criar_equipe():
        
 
 if __name__ == '__main__':
-    
+ #inicializao da janela de inicializao do jogo (nome de equipa, treinador, escolha de equipamento)   
     window = tk.Tk()
     window.title("Inicialização de jogo")
     window.geometry("500x300")
     label_titulo = tk.Label(window, text="Ben-vindo ao PyBall Football Manager", bg="orange", fg="black", font=("Arial", 10, "bold")).pack()
-    label_nome = tk.Label(window, text="Nome da Equipe:")
+    label_nome = tk.Label(window, text="Nome da Equipa:")
     label_nome.pack()
 
     entry_nome = tk.Entry(window)
@@ -444,7 +445,7 @@ if __name__ == '__main__':
     entry_nome_treinador = tk.Entry(window)
     entry_nome_treinador.pack()
 
-    btn_criar_equipe = tk.Button(window, text="Criar Equipe", command=criar_equipe)
+    btn_criar_equipe = tk.Button(window, text="Criar Equipa", command=criar_equipe)
     btn_criar_equipe.pack()
 
     label_nome = tk.Label(window, text="Equipamento:")
@@ -464,7 +465,7 @@ if __name__ == '__main__':
     radio_3.place(x=360, y=240)
 
     window.mainloop()
-    
+    #execuçao do teste unitario à funçao gerar_jogadores
     print("\nResultado Teste Unitario")
     unittest.main()
 
