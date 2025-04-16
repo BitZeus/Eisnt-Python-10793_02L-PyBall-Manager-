@@ -130,71 +130,28 @@ class SimuladorFutebol(tk.Tk):
         random.shuffle(avancados)
         random.shuffle(grs)
 
-        #4-4-2
-        if self.formacao_minha_equipa =='1':
-            titulares = defesas[:4] + medios[:4] + avancados[:2] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
+        formacoes = {
+            "1": (4, 4, 2),
+            "2": (4, 3, 3),
+            "3": (4, 2, 4),
+            "4": (4, 5, 1),
+            "5": (3, 5, 2),
+            "0": (4, 4, 2)  # padrão
+        }
 
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
+        defesas_tit, medios_tit, avs_tit = formacoes.get(self.formacao_minha_equipa, (4, 4, 2))
 
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
-        
-        #4-3-3
-        elif self.formacao_minha_equipa=='2':
-            titulares = defesas[:4] + medios[:3] + avancados[:3] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
+        titulares = defesas[:defesas_tit] + medios[:medios_tit] + avancados[:avs_tit] + grs[:1]
+        suplentes = defesas[defesas_tit:] + medios[medios_tit:] + avancados[avs_tit:] + grs[1:]
 
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
+        jogadores_titulares_equipa[equipa] = titulares
+        jogadores_suplentes_equipa[equipa] = suplentes
 
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
-        
-        #4-2-4
-        elif self.formacao_minha_equipa=='3': 
-            titulares = defesas[:4] + medios[:2] + avancados[:4] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
-
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
-
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
-            
-        #4-5-1
-        elif self.formacao_minha_equipa=='4': 
-            titulares = defesas[:4] + medios[:5] + avancados[:1] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
-
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
-
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
-        
-        #3-5-2
-        elif self.formacao_minha_equipa=='5': 
-            titulares = defesas[:3] + medios[:5] + avancados[:2] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
-
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
-
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
-        else:
-            titulares = defesas[:4] + medios[:4] + avancados[:2] + grs[:1]
-            suplentes = defesas[4:] + medios[4:] + avancados[2:] + grs[1:]
-
-            jogadores_titulares_equipa[equipa] = titulares
-            jogadores_suplentes_equipa[equipa] = suplentes
-
-            formacao.append(jogadores_titulares_equipa)
-            formacao.append(jogadores_suplentes_equipa)
+        formacao.append(jogadores_titulares_equipa)
+        formacao.append(jogadores_suplentes_equipa)
 
         return formacao
+
     #funçao que cria dicionario de jogadores por equipa tendo em conta a quantidade por posiçao
     def criar_dicionario_jogadores(self, equipas, jogadores):
         dicionario_jogadores = {}
@@ -290,7 +247,7 @@ class SimuladorFutebol(tk.Tk):
         for i, jogador in enumerate(self.formacao_equipa_adversaria[1][self.nome_equipa_adversaria]):
             jogadores_texto += f"\n{i + 12}. {jogador}"
 
-        janela = tk.Tk()
+        janela = tk.Toplevel(self)
         janela.geometry("200x450")
         tk.Label(janela, text=jogadores_texto, anchor="w", justify="left").pack()
 
@@ -393,22 +350,32 @@ class SimuladorFutebol(tk.Tk):
             self.formacao_equipa_adversaria=""
     #funcao que exibe a tabela de classificaçao das equipas        
     def ver_tabela(self):
-        tabela= tk.Tk()
-        tabela.title("Tabela")  
-        tabela_texto=""
-        tabela.geometry("450x200")
-        for i, (equipa, dados) in enumerate(sorted(self.tabela.items(), key=lambda x: (x[1]['pontos'], x[1]['golos']), reverse=True), start=1):
-            tabela_texto += f"{i}. {equipa}:        {dados['pontos']:02} Pts            Vitórias={dados['vitorias']}, Empates={dados['empates']}, Derrotas={dados['derrotas']}, Golos={dados['golos']:02}\n"
-        
-        label_nome = tk.Label(tabela, text=tabela_texto, anchor="w", justify="left")
-        label_nome.place(x=20, y=20)
+        tabela = tk.Toplevel(self)
+        tabela.title("Tabela de Classificação")  
+        tabela.geometry("500x300")
+    
+        scrollbar = tk.Scrollbar(tabela)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    
+        text_area = tk.Text(tabela, wrap=tk.WORD, yscrollcommand=scrollbar.set)
+        text_area.pack(expand=True, fill=tk.BOTH)
+    
+        for i, (equipa, dados) in enumerate(
+            sorted(self.tabela.items(), key=lambda x: (x[1]['pontos'], x[1]['golos']), reverse=True), start=1
+        ):
+            linha = f"{i}. {equipa}: {dados['pontos']:02} Pts | Vitórias={dados['vitorias']}, Empates={dados['empates']}, Derrotas={dados['derrotas']}, Golos={dados['golos']:02}\n"
+            text_area.insert(tk.END, linha)
+    
+        scrollbar.config(command=text_area.yview)
+
         
         
  #classe do teste unitario de soma       
 class TestSoma(unittest.TestCase):
     def test_juntar_palavras_com_espaço(self):
         app = SimuladorFutebol("", "")
-        self.assertEqual(app.gerar_jogador("a", "b"), "a b")
+        self.assertEqual(app.gerar_jogador(["a"], ["b"]), "a b")
+
 #subclasse equipa
 class Equipa:
     def __init__(self, nome, jogadores, saldo, treinador):
